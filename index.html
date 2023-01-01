@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>file upload</title>
+</head>
+<body>
+    <input type="file" id="myFiles" accept="image/*" multiple/>
+    <input type="text" id="input" name="text"/>
+    <button id="btn">submit</button>
+    <script>
+        const btn = document.getElementById('btn')
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault()
+            const files = document.getElementById('myFiles').files
+            const text = document.getElementById('input').value
+
+            const formData = new FormData();
+
+            Object.keys(files).forEach(key => {
+                const file = files[key]
+                formData.append(file.name, file)
+            })
+
+            formData.append('name', text)
+
+            const response = await fetch("http://localhost:3500/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const json = response.json()
+
+            console.log('response', response)
+            console.log('json', json)
+
+
+        })
+    </script>
+</body>
+</html>
